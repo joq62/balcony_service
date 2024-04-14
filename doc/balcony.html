@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module balcony</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module balcony</h1>
+<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+<p>Copyright © (C) 2023, c50
+  
+  
+ Kp - proportional gain
+ Ki - integral gain
+ Kd - derivative gain
+ sample_interval - loop interval time
+ previous_error := 0
+ integral := 0
+ loop:
+   error := setpoint − measured_value
+   proportional := error;
+   integral := integral + error × dt
+   derivative := (error − previous_error) / dt
+   output := Kp × proportional + Ki × integral + Kd × derivative
+   previous_error := error
+   wait(dt)
+   goto loop
+   pwm_interval = 50 seconds
+   dt= 20 sec						%
+   0 &lt;= pwm_value &lt;= pwm_interval
+
+ --------------------------- API ------------------------------------
+
+
+
+
+ 
+   Created :  2 Jun 2023 by c50 &lt;joq62@c50&gt;
+  -------------------------------------------------------------------</p>
+
+<p><b>Behaviours:</b> <a href="gen_server.html"><tt>gen_server</tt></a>.</p>
+<p><b>Authors:</b> c50 (<a href="mailto:joq62@c50"><tt>joq62@c50</tt></a>).</p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#activate_result-1">activate_result/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#calc_errors_result-1">calc_errors_result/1</a></td><td>.</td></tr>
+<tr><td valign="top"><a href="#calc_pid_result-1">calc_pid_result/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#get_temp-0">get_temp/0</a></td><td>
+  Gets the latest measured temperture.</td></tr>
+<tr><td valign="top"><a href="#in_session-0">in_session/0</a></td><td>
+   Reply if a session is ongoing or not.</td></tr>
+<tr><td valign="top"><a href="#is_available-0">is_available/0</a></td><td>
+   Reply if the balcony heathers are reachable.</td></tr>
+<tr><td valign="top"><a href="#new_session-0">new_session/0</a></td><td>
+  Starts a new session.</td></tr>
+<tr><td valign="top"><a href="#pid_info-0">pid_info/0</a></td><td>
+  Gets pid controllers internal data.</td></tr>
+<tr><td valign="top"><a href="#ping-0">ping/0</a></td><td>.</td></tr>
+<tr><td valign="top"><a href="#start-0">start/0</a></td><td>.</td></tr>
+<tr><td valign="top"><a href="#start_link-0">start_link/0</a></td><td>
+  Starts the server.</td></tr>
+<tr><td valign="top"><a href="#stop_session-0">stop_session/0</a></td><td>
+  Stops a ongoing session.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="activate_result-1">activate_result/1</a></h3>
+<div class="spec">
+<p><tt>activate_result(X1::{Result::atom(), NewState::term()}) -&gt; ok</tt><br></p>
+<p> </p>
+</div>
+
+<h3 class="function"><a name="calc_errors_result-1">calc_errors_result/1</a></h3>
+<div class="spec">
+<p><tt>calc_errors_result(X1::{Result::atom(), NewState::term()}) -&gt; ok</tt><br></p>
+<p> </p>
+</div><p>
+ </p>
+
+<h3 class="function"><a name="calc_pid_result-1">calc_pid_result/1</a></h3>
+<div class="spec">
+<p><tt>calc_pid_result(X1::{Result::atom(), NewState::term()}) -&gt; ok</tt><br></p>
+<p> </p>
+</div>
+
+<h3 class="function"><a name="get_temp-0">get_temp/0</a></h3>
+<div class="spec">
+<p><tt>get_temp() -&gt; Temp::float() | {error, Error::term()}</tt><br></p>
+<p> </p>
+</div><p>
+  Gets the latest measured temperture
+ </p>
+
+<h3 class="function"><a name="in_session-0">in_session/0</a></h3>
+<div class="spec">
+<p><tt>in_session() -&gt; InSession::boolean() | {error, Error::term()}</tt><br></p>
+<p> </p>
+</div><p>
+   Reply if a session is ongoing or not
+ </p>
+
+<h3 class="function"><a name="is_available-0">is_available/0</a></h3>
+<div class="spec">
+<p><tt>is_available() -&gt; IsAvailable::boolean() | {error, Error::term()}</tt><br></p>
+<p> </p>
+</div><p>
+   Reply if the balcony heathers are reachable
+ </p>
+
+<h3 class="function"><a name="new_session-0">new_session/0</a></h3>
+<div class="spec">
+<p><tt>new_session() -&gt; ok | {error, Error::term()}</tt><br></p>
+<p> </p>
+</div><p>
+  Starts a new session. If a session is ongoing that session is stopped
+  and a new session is started. The PID controller activates and controls
+  the heathers
+  States: no_session, ongoing_session</p>
+
+<h3 class="function"><a name="pid_info-0">pid_info/0</a></h3>
+<div class="spec">
+<p><tt>pid_info() -&gt; State::term() | {error, Error::term()}</tt><br></p>
+<p> </p>
+</div><p>
+  Gets pid controllers internal data. Debug purpose
+ </p>
+
+<h3 class="function"><a name="ping-0">ping/0</a></h3>
+<div class="spec">
+<p><tt>ping() -&gt; any()</tt></p>
+<p> </p>
+</div><p>
+ </p>
+
+<h3 class="function"><a name="start-0">start/0</a></h3>
+<div class="spec">
+<p><tt>start() -&gt; any()</tt></p>
+<p> </p>
+</div><p>
+ </p>
+
+<h3 class="function"><a name="start_link-0">start_link/0</a></h3>
+<div class="spec">
+<p><tt>start_link() -&gt; {ok, Pid::pid()} | {error, Error::{already_started, pid()}} | {error, Error::term()} | ignore</tt><br></p>
+<p> </p>
+</div><p>
+  Starts the server</p>
+
+<h3 class="function"><a name="stop_session-0">stop_session/0</a></h3>
+<div class="spec">
+<p><tt>stop_session() -&gt; ok</tt><br></p>
+<p> </p>
+</div><p>
+  Stops a ongoing session. The PID controller deactivates and turns off
+  the heathers. Same procedure if no session is ongoing</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc</i></p>
+</body>
+</html>
